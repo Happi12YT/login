@@ -37,12 +37,15 @@
   </header>
 
   <!-- SEKCJA WAKACYJNA -->
-  <section class="summer" id="wakacje">
-    <h2>Mamy wakacje! 😎</h2>
-    <p>Zobaczcie ile zostało do końca wakacji i kiedy odpalam live!</p>
-    <button onclick="window.location.href='https://happi12yt.github.io/licznik/koniec_wakacji'">
-  Zobacz tutaj
-    </button>
+  <section class="login-form">
+  <h2>Załóż konto Happi12</h2>
+  <form id="registerForm">
+    <input type="text" id="displayName" placeholder="Nazwa użytkownika" required />
+    <input type="email" id="email" placeholder="Adres e-mail" required />
+    <input type="password" id="password" placeholder="Hasło" required />
+    <button type="submit">Zarejestruj się</button>
+    <p>Masz już konto? <a href="/login/">Zaloguj się</a></p>
+  </form>
   </section>
 
   <!-- COUNTDOWN -->
@@ -84,5 +87,37 @@
     setInterval(updateCountdown, 1000);
     updateCountdown();
   </script>
+
+  <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCiWN76pTmswQetee7CGdNc6Q845Hrdg8A",
+    authDomain: "happi12-sites.firebaseapp.com",
+    projectId: "happi12-sites",
+    storageBucket: "happi12-sites.firebasestorage.app",
+    messagingSenderId: "269132427609",
+    appId: "1:269132427609:web:049c9b03f8b4224a37dc48"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  document.getElementById("registerForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const name = document.getElementById("displayName").value;
+    const email = document.getElementById("email").value;
+    const pass = document.getElementById("password").value;
+
+    try {
+      const userCred = await createUserWithEmailAndPassword(auth, email, pass);
+      await updateProfile(userCred.user, { displayName: name });
+      window.location.href = "/konto/";
+    } catch (error) {
+      alert("Błąd: " + error.message);
+    }
+  });
+        </script>
 </body>
   </html>
